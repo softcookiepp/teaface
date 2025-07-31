@@ -35,15 +35,17 @@ def main() -> None:
 		run_tests()
 	else:
 		assert not args.path is None, "Path must be specificed using the `--path` argument."
-		if args.model is None:
-			args.model = "ArcFace"
-		assert args.model in ["ArcFace"]
+		ALL_MODELS = ["DeepFace", "FaceNet", "VGG-Face", "ArcFace"]
+		models = ALL_MODELS
+		if not args.model is None:
+			models = [args.model]
 		
 		out_dir = args.output_directory
 		if out_dir is None:
 			out_dir = os.getcwd()
 		
 		for target_model in [args.model]:
+			assert target_model in ALL_MODELS:
 			if args.generate_embeddings:
 				assert os.path.isdir(args.path)
 				absolute_files = []
