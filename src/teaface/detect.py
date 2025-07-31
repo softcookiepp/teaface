@@ -14,7 +14,7 @@ def get_face_embeddings(imgs):
 	for img in imgs:
 		for f in DeepFace.represent(img_path = img, enforce_detection = False, model_name = "ArcFace"):
 			# account for multiple faces in single image
-			file_refs.append(img_path)
+			file_refs.append(img)
 			out_list.append(f)
 	file_refs = np.array(file_refs)
 	arr_list = []
@@ -23,7 +23,6 @@ def get_face_embeddings(imgs):
 		embedding = np.array(out["embedding"]).reshape(1, -1)
 		arr_list.append(embedding)
 	out = np.concatenate(arr_list, axis = 0)
-	input(out.shape)
 	return file_refs, out
 
 def extract_faces(path_to_image: str):
@@ -75,4 +74,5 @@ def batch_extract_embeddings(img_paths: list, batch_size = 64, model = "ArcFace"
 		file_ref_batches.append(file_refs)
 	file_refs = np.concatenate(file_ref_batches, axis = 0)
 	embeddings = np.concatenate(embedding_batches, axis = 0)
+	assert file_refs.shape[0] == embeddings.shape[0]
 	return file_refs, embeddings
