@@ -16,6 +16,9 @@ def main() -> None:
 						action='store_true',
 						dest='version')
 	parser.add_argument("--test", help="Run tests", action = "store_true", dest = "test")
+	parser.add_argument("--generate-embeddings", help = "Generate an embedding database", action = "store_true")
+	parser.add_argument("--path", help = "image/folder for querying or embedding generation", default = None)
+	parser.add_argument("--model", help = "Model to use for embedding generation or querying", default = "all")
 
 	args = parser.parse_args()
 
@@ -24,6 +27,11 @@ def main() -> None:
 		return
 	if args.test:
 		run_tests()
+	else:
+		assert not args.path is None, "Path must be specificed using the `--path` argument."
+		if model is None:
+			raise NotImplementedError
+		raise NotImplementedError
 
 if __name__ == '__main__':
 	main()

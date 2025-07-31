@@ -2,8 +2,6 @@ import cv2
 import sys
 import numpy as np
 
-from sklearn.cluster import DBSCAN
-
 import os
 
 #path_to_image = sys.argv[1]
@@ -78,8 +76,3 @@ def batch_extract_embeddings(img_paths: list, batch_size = 64, model = "ArcFace"
 	file_refs = np.concatenate(file_ref_batches, axis = 0)
 	embeddings = np.concatenate(embedding_batches, axis = 0)
 	return file_refs, embeddings
-
-folder = sys.argv[1]
-files = os.listdir(folder)
-os.chdir(folder)
-batch_extract_embeddings(files)
