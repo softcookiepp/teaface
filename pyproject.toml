@@ -26,6 +26,7 @@ dependencies = [
 	"typing",
 	"argparse",
 	"pytest>=8.4.0"
+	"deepface==0.0.93"
 ]
 description = "Utility for face embedding database generation, and for querying face images against them"
 version = "0.0.1"
