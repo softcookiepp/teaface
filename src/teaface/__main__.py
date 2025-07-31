@@ -7,6 +7,7 @@ from .testing import run_tests
 from . import version
 import os
 from . detect import batch_extract_embeddings
+import numpy as np
 
 
 def main() -> None:
@@ -23,6 +24,7 @@ def main() -> None:
 	parser.add_argument("--model", help = "Model to use for embedding generation or querying", default = None)
 	parser.add_argument("--db", help = "Embedding database to use")
 	parser.add_argument("--batch-size", help = "Batch size to use for embedding generation", default = 64, type = int)
+	parser.add_argument("--output-directory", help = "Directory to save embedding databases (defaults to current directory", default = None)
 
 	args = parser.parse_args()
 
@@ -36,18 +38,26 @@ def main() -> None:
 		if args.model is None:
 			args.model = "ArcFace"
 		assert args.model in ["ArcFace"]
-		if args.generate_embeddings:
-			assert os.path.isdir(args.path)
-			absolute_files = []
-			for root, dirs, files in os.walk(args.path):
-				
-				for fn in files:
-					absolute_files.append(os.path.join(root, fn) )
-			file_refs, embeddings = batch_extract_embeddings(absolute_files, args.batch_size, args.model)
-			input(embeddings)
-		else:
-			# verify images
-			raise NotImplementedError
+		
+		out_dir = args.output_directory
+		if out_dir is None:
+			out_dir = os.getcwd()
+		
+		for target_model in [args.model]:
+			if args.generate_embeddings:
+				assert os.path.isdir(args.path)
+				absolute_files = []
+				for root, dirs, files in os.walk(args.path):
+					
+					for fn in files:
+						absolute_files.append(os.path.join(root, fn) )
+				file_refs, embeddings = batch_extract_embeddings(absolute_files, args.batch_size, target_model)
+				db_filename = os.path.join(out_dir, f"db_{target_model}_{len(file_refs)}.npz")
+				np.savez_embeddings(db_filename, file_refs = file_refs, embeddings = embeddings)
+				print(f"Wrote embedding database for {target_model} to `{db_filename}`")
+			else:
+				# verify images
+				raise NotImplementedError
 
 if __name__ == '__main__':
 	main()
