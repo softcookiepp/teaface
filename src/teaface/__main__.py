@@ -44,8 +44,8 @@ def main() -> None:
 		if out_dir is None:
 			out_dir = os.getcwd()
 		
-		for target_model in [args.model]:
-			assert target_model in ALL_MODELS:
+		for target_model in models:
+			assert target_model in ALL_MODELS
 			if args.generate_embeddings:
 				assert os.path.isdir(args.path)
 				absolute_files = []
