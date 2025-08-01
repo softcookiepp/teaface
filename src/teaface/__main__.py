@@ -55,7 +55,7 @@ def main() -> None:
 						absolute_files.append(os.path.join(root, fn) )
 				file_refs, embeddings = batch_extract_embeddings(absolute_files, args.batch_size, target_model)
 				db_filename = os.path.join(out_dir, f"db_{target_model}_{len(file_refs)}.npz")
-				np.savez_embeddings(db_filename, file_refs = file_refs, embeddings = embeddings)
+				np.savez_compressed(db_filename, file_refs = file_refs, embeddings = embeddings)
 				print(f"Wrote embedding database for {target_model} to `{db_filename}`")
 			else:
 				# verify images
